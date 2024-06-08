@@ -63,9 +63,11 @@ Navigate to the directory containing quickfetch.py and run:
 
 Move the compiled binary to /usr/bin folder for permanent installation :-
 
+```bash
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
+```
 
-Usage
+Usage :-
 
 Simply run the quickfetch executable from your terminal:
 
