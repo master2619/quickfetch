@@ -53,7 +53,7 @@ def get_gpu_info():
     if not gpu_list:
         # Check for integrated GPUs using lshw
         try:
-            output = subprocess.check_output("lshw -C display", shell=True).decode()
+            output = subprocess.check_output("sudo lshw -C display 2>/dev/null", shell=True).decode()
             for line in output.split("\n"):
                 if "product:" in line:
                     gpu_list.append(line.strip().split("product:")[1].strip())
@@ -63,13 +63,13 @@ def get_gpu_info():
 
 def get_package_manager_info():
     package_managers = {
-        "dpkg": "dpkg-query -f '.\n' -W | wc -l",
+        "dpkg": "dpkg-query -f '.\n' -W 2>/dev/null | wc -l",
         "apt": "apt list --installed 2>/dev/null | wc -l",
-        "rpm": "rpm -qa | wc -l",
-        "pacman": "pacman -Q | wc -l",
-        "dnf": "dnf list installed | wc -l",
-        "snap": "snap list | wc -l",
-        "flatpak": "flatpak list | wc -l"
+        "rpm": "rpm -qa 2>/dev/null | wc -l",
+        "pacman": "pacman -Q 2>/dev/null | wc -l",
+        "dnf": "dnf list installed 2>/dev/null | wc -l",
+        "snap": "snap list 2>/dev/null | wc -l",
+        "flatpak": "flatpak list 2>/dev/null | wc -l"
     }
     installed_packages = {}
     for manager, command in package_managers.items():
@@ -117,4 +117,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
