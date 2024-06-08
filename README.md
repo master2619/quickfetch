@@ -1,14 +1,27 @@
 QuickFetch is a Linux-only system information tool written in Python, designed to display useful system details in a concise and visually appealing way. It provides information such as the operating system, kernel, architecture, CPU, GPU, memory usage, uptime, and package manager statistics.
-Features
 
-    Displays user information
-    Shows OS and kernel version
-    Lists architecture and CPU details
-    Shows GPU information (integrated and dedicated)
-    Displays memory usage
-    Shows system uptime
-    Lists package counts from common package managers (dpkg, apt, snap, flatpak, and universal package managers)
-    And more!
+Sample Output and displayed features :-
+
+User: deepesh@HP-Linux-Laptop
+OS: Zorin OS 17.1
+Kernel: 6.9.3-x64v3-xanmod1
+Architecture: x86_64
+CPU: AMD Ryzen 3 3250U with Radeon Graphics (4 cores)
+GPU: Picasso/Raven 2 [Radeon Vega Series / Radeon Vega Mobile Series]
+Memory: 2.25GiB / 21.45GiB
+Uptime: 4:27:21
+Resolution: XWAYLAND0
+DE: Zorin
+WM: Wayland
+WM Theme: 'Adwaita'
+Theme: 'ZorinBlue-Dark'
+Icons: 'ZorinBlue-Dark'
+Terminal: truecolor
+Dpkg: 2813 packages
+Apt: 2809 packages
+Snap: 7 packages
+Flatpak: 39 packages
+
 
 Installation and Dependencies :-
 
@@ -85,21 +98,6 @@ Simply run the quickfetch executable from your terminal:
 ```bash
 quickfetch
 ```
-
-You will see output similar to the following:
-
-User: deepesh@HP-Linux-Laptop
-OS: Zorin OS 17.1
-Kernel: 6.9.3-x64v3-xanmod1
-Architecture: x86_64
-CPU: AMD Ryzen 3 3250U with Radeon Graphics (4 cores)
-GPU: Picasso/Raven 2 [Radeon Vega Series / Radeon Vega Mobile Series]
-Memory: 2.63GiB / 21.45GiB
-Uptime: 0:25:16
-Dpkg: 2812 packages
-Apt: 2808 packages
-Snap: 7 packages
-Flatpak: 39 packages
 
 To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
 
