@@ -29,29 +29,40 @@ QuickFetch requires the following Python libraries:
 
 Install the dependencies using pip:
 
+```bash
 pip3 install psutil distro colorama GPUtil
+```
 
 Compiling from Source
 
 To compile QuickFetch into a standalone executable using PyInstaller, follow these steps:
 
+
+```bash
 pip3 install pyinstaller
+```
 
 Ensure PyInstaller is in Your PATH:
 
 If pyinstaller command is not found after installation, you may need to add the local installation directory to your PATH. Find the installation location:
 
+```bash
 pip3 show pyinstaller
+```
 
 Look for the Location line in the output and add the bin directory within this location to your PATH. For example:
 
+```bash
 export PATH=$PATH:/home/$USER/.local/bin
+```
 
 To make this change permanent, add the above line to your ~/.profile or ~/.bashrc or ~/.bash_profile file and reload it:
 
+```bash
 echo 'export PATH=$PATH:/home/$USER/.local/bin' >> ~/.bashrc
 
 source ~/.bashrc
+```
 
 Compile the Script:
 
@@ -59,7 +70,7 @@ Navigate to the directory containing quickfetch.py and run:
 
     pyinstaller --onefile quickfetch.py
 
-    The compiled executable will be located in the dist directory.
+The compiled executable will be located in the dist directory.
 
 Move the compiled binary to /usr/bin folder for permanent installation :-
 
