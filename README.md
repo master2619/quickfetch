@@ -12,6 +12,14 @@ Features
 
 Installation and Dependencies :-
 
+Easy Method (Single Command) :-
+
+```bash
+curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sh
+```
+
+Manual Compile and Install method :-
+
 QuickFetch requires the following Python libraries:
 
     psutil
