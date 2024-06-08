@@ -2,6 +2,7 @@ QuickFetch is a Linux-only system information tool written in Python, designed t
 
 Sample Output and displayed features :-
 
+```bash
 User: deepesh@HP-Linux-Laptop
 OS: Zorin OS 17.1
 Kernel: 6.9.3-x64v3-xanmod1
@@ -21,7 +22,7 @@ Dpkg: 2813 packages
 Apt: 2809 packages
 Snap: 7 packages
 Flatpak: 39 packages
-
+```
 
 Installation and Dependencies :-
 
