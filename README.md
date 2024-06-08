@@ -8,9 +8,9 @@ Features
     Displays memory usage
     Shows system uptime
     Lists package counts from common package managers (dpkg, apt, snap, flatpak, and universal package managers)
+    And more!
 
-Installation
-Dependencies
+Installation and Dependencies :-
 
 QuickFetch requires the following Python libraries:
 
@@ -33,13 +33,9 @@ Ensure PyInstaller is in Your PATH:
 
 If pyinstaller command is not found after installation, you may need to add the local installation directory to your PATH. Find the installation location:
 
-bash
-
 pip3 show pyinstaller
 
 Look for the Location line in the output and add the bin directory within this location to your PATH. For example:
-
-bash
 
 export PATH=$PATH:/home/$USER/.local/bin
 
@@ -80,7 +76,7 @@ Flatpak: 39 packages
 
 Note:-
  To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
- Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.profile" and 'export PATH=$PATH:/home/$USER/Downloads'"
+ Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc" and 'export PATH=$PATH:/home/$USER/Downloads'"
 
 License
 
