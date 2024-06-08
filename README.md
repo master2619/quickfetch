@@ -1,8 +1,12 @@
-QuickFetch is a Linux-only system information tool written in Python, designed to display useful system details in a concise and visually appealing way. It provides information such as the operating system, kernel, architecture, CPU, GPU, memory usage, uptime, and package manager statistics.
+# QuickFetch
 
-Sample Output and displayed features :-
+QuickFetch is a lightweight system information tool designed for Linux systems. It provides concise and visually appealing details about your system's configuration and usage. With QuickFetch, you can quickly access essential information such as the operating system, kernel version, hardware architecture, CPU and GPU specifications, memory usage, uptime, and package manager statistics.
 
-```bash
+## Features
+
+### Sample Output
+
+\```bash
 User: deepesh@HP-Linux-Laptop
 OS: Zorin OS 17.1
 Kernel: 6.9.3-x64v3-xanmod1
@@ -22,105 +26,89 @@ Dpkg: 2813 packages
 Apt: 2809 packages
 Snap: 7 packages
 Flatpak: 39 packages
-```
+\```
 
-Installation and Dependencies :-
+### Installation
 
-Easy Method (Single Command) :-
+#### Easy Installation
 
-```bash
+To install QuickFetch with a single command:
+
+\```bash
 sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sudo sh
-```
+\```
 
-Manual Compile and Install method :-
+#### Manual Compilation
 
 QuickFetch requires the following Python libraries:
 
-    psutil
-    distro
-    colorama
-    GPUtil
+- psutil
+- distro
+- colorama
+- GPUtil
 
 Install the dependencies using pip:
 
-```bash
+\```bash
 pip3 install psutil distro colorama GPUtil
-```
+\```
 
-Compiling from Source
+To compile QuickFetch into a standalone executable using PyInstaller:
 
-To compile QuickFetch into a standalone executable using PyInstaller, follow these steps:
-
-
-```bash
+\```bash
 pip3 install pyinstaller
-```
+\```
 
-Ensure PyInstaller is in Your PATH:
+Ensure PyInstaller is in your PATH:
 
-If pyinstaller command is not found after installation, you may need to add the local installation directory to your PATH. Find the installation location:
-
-```bash
-pip3 show pyinstaller
-```
-
-Look for the Location line in the output and add the bin directory within this location to your PATH. For example:
-
-```bash
+\```bash
 export PATH=$PATH:/home/$USER/.local/bin
-```
+\```
 
-To make this change permanent, add the above line to your ~/.profile or ~/.bashrc or ~/.bash_profile file and reload it:
+Compile the script:
 
-```bash
-echo 'export PATH=$PATH:/home/$USER/.local/bin' >> ~/.bashrc
+\```bash
+pyinstaller --onefile quickfetch.py
+\```
 
-source ~/.bashrc
-```
+Move the compiled binary to `/usr/bin` for permanent installation:
 
-Compile the Script:
-
-Navigate to the directory containing quickfetch.py and run:
-
-    pyinstaller --onefile quickfetch.py
-
-The compiled executable will be located in the dist directory.
-
-Move the compiled binary to /usr/bin folder for permanent installation :-
-
-```bash
+\```bash
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
-```
+\```
 
-Usage :-
+### Usage
 
-Simply run the quickfetch executable from your terminal:
+Simply run the `quickfetch` executable from your terminal:
 
-```bash
+\```bash
 quickfetch
-```
+\```
 
-To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
+### Making QuickFetch Accessible Everywhere
 
-Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running :-
+To make the `quickfetch` binary accessible from anywhere in the terminal, add the parent directory of the binary file to your `~/.bashrc` or `~/.profile`:
 
-```bash
+\```bash
 echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc
-```
+\```
 
-License
+### License
 
-This project is licensed under the GPL 3.0 License. See the LICENSE file for details.
-Contributing
+This project is licensed under the GPL 3.0 License. See the [LICENSE](LICENSE) file for details.
+
+### Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
-Issues
 
-If you encounter any issues or have suggestions for improvements, please open an issue on the GitHub repository.
-Acknowledgements :-
+### Issues
 
-    Inspired by Neofetch
-    Uses psutil for system information
-    Uses distro for Linux distribution detection
-    Uses GPUtil for GPU information
-    Uses colorama for colored terminal output
+If you encounter any issues or have suggestions for improvements, please open an issue on the [GitHub repository](https://github.com/master2619/quickfetch).
+
+## Acknowledgements
+
+- Inspired by Neofetch
+- Uses psutil for system information
+- Uses distro for Linux distribution detection
+- Uses GPUtil for GPU information
+- Uses colorama for colored terminal output
