@@ -42,6 +42,7 @@ export PATH=$PATH:/home/$USER/.local/bin
 To make this change permanent, add the above line to your ~/.profile or ~/.bashrc or ~/.bash_profile file and reload it:
 
 echo 'export PATH=$PATH:/home/$USER/.local/bin' >> ~/.bashrc
+
 source ~/.bashrc
 
 Compile the Script:
@@ -72,11 +73,11 @@ Dpkg: 2812 packages
 Apt: 2808 packages
 Snap: 7 packages
 Flatpak: 39 packages
-████████████████████████████████████████████████████████████████
 
 Note:-
  To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
- Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc" and 'export PATH=$PATH:/home/$USER/Downloads'"
+ Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc" and 
+ 'export PATH=$PATH:/home/$USER/Downloads'"
 
 License
 
