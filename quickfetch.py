@@ -7,6 +7,7 @@ from datetime import datetime
 import distro
 import cpuinfo
 import GPUtil
+import argparse
 
 def get_os_info():
     if platform.system() == "Linux":
@@ -18,6 +19,28 @@ def get_os_info():
 def get_kernel_info():
     return platform.release()
 
+def get_battery_info():
+    if psutil.sensors_battery():
+        battery = psutil.sensors_battery()
+        percent = battery.percent
+        status = "Charging" if battery.power_plugged else "Discharging"
+        return f"{percent}% [{status}]"
+    return "No Battery"
+
+def get_disk_usage_info():
+    disk_partitions = psutil.disk_partitions()
+    disk_usage = {}
+    for partition in disk_partitions:
+        if partition.mountpoint.startswith("/snap"):
+            continue
+        usage = psutil.disk_usage(partition.mountpoint)
+        disk_usage[partition.mountpoint] = (usage.total, usage.used)
+    return disk_usage
+
+def get_swap_info():
+    swap = psutil.swap_memory()
+    return swap.total, swap.used
+
 def get_arch_info():
     return platform.machine()
 
@@ -27,9 +50,24 @@ def get_cpu_info():
     cpu_cores = psutil.cpu_count(logical=True)
     return cpu_name, cpu_cores
 
+def get_local_ip_info(interface='wlo1'):
+    try:
+        ip_address = socket.gethostbyname(socket.gethostname())
+        if ip_address.startswith("127."):
+            interfaces = psutil.net_if_addrs()
+            for iface in interfaces.get(interface, []):
+                if iface.family == socket.AF_INET:
+                    return iface.address
+    except Exception as e:
+        pass
+    return "Unknown"
+
 def get_memory_info():
     mem = psutil.virtual_memory()
     return mem.total, mem.used
+
+def get_locale_info():
+    return os.environ.get('LANG', 'Unknown')
 
 def get_uptime_info():
     boot_time_timestamp = psutil.boot_time()
@@ -82,17 +120,21 @@ def get_package_manager_info():
 
 def get_resolution():
     try:
-        output = os.popen('xrandr').read()
-        for line in output.splitlines():
-            if 'connected primary' in line:
-                resolution = line.split()[0]
-                return resolution
+        output = subprocess.check_output('xrandr | grep "*" | awk \'{print $1}\'', shell=True).decode().strip()
+        if output:
+            return output
+        else:
+            output = subprocess.check_output('xdpyinfo | grep dimensions', shell=True).decode().strip()
+            resolution = output.split()[1]
+            return resolution
     except:
         return "Unknown"
 
 def get_desktop_environment():
     desktop_session = os.environ.get('DESKTOP_SESSION', "").lower()
-    if "gnome" in desktop_session:
+    if "zorin" in desktop_session:
+        return "Zorin"
+    elif "gnome" in desktop_session:
         return "GNOME"
     elif "kde" in desktop_session:
         return "KDE Plasma"
@@ -114,41 +156,103 @@ def get_desktop_environment():
         return desktop_session.capitalize() if desktop_session else "Unknown"
 
 def get_window_manager():
-    window_manager = os.environ.get('XDG_SESSION_TYPE', "").lower()
-    if window_manager == "wayland":
-        return "Wayland"
-    elif "x11" in window_manager:
-        try:
-            output = subprocess.check_output("wmctrl -m 2>/dev/null | grep 'Name:'", shell=True).decode().strip()
-            window_manager = output.split(":")[1].strip()
-            return window_manager
-        except:
-            pass
-    return window_manager.capitalize() if window_manager else "Unknown"
+    try:
+        output = subprocess.check_output("echo $XDG_SESSION_TYPE", shell=True).decode().strip().lower()
+        if output == "wayland":
+            return "Wayland"
+        elif output == "x11":
+            try:
+                wm_output = subprocess.check_output("wmctrl -m | grep 'Name:'", shell=True).decode().strip()
+                window_manager = wm_output.split(":")[1].strip()
+                return window_manager
+            except:
+                pass
+    except:
+        pass
+    return "Unknown"
 
 def get_window_manager_theme():
     try:
-        output = os.popen('gsettings get org.gnome.desktop.wm.preferences theme').read()
-        return output.strip()
+        # For GNOME
+        if "gnome" in os.environ.get('DESKTOP_SESSION', "").lower():
+            output = subprocess.check_output('gsettings get org.gnome.desktop.wm.preferences theme', shell=True).decode().strip()
+            return output.strip("'")
+
+        # For KDE Plasma
+        if "kde" in os.environ.get('DESKTOP_SESSION', "").lower():
+            output = subprocess.check_output('kreadconfig5 --group WM --key theme', shell=True).decode().strip()
+            return output
+
+        # For Zorin
+        if "zorin" in os.environ.get('DESKTOP_SESSION', "").lower():
+            output = subprocess.check_output('gsettings get org.gnome.desktop.wm.preferences theme', shell=True).decode().strip()
+            return output.strip("'")
     except:
-        return "Unknown"
+        pass
+    return "Unknown"
 
 def get_gtk_theme():
     try:
-        output = os.popen('gsettings get org.gnome.desktop.interface gtk-theme').read()
-        return output.strip()
+        output = subprocess.check_output('gsettings get org.gnome.desktop.interface gtk-theme', shell=True).decode().strip()
+        return output.strip("'")
     except:
         return "Unknown"
 
 def get_icon_theme():
     try:
-        output = os.popen('gsettings get org.gnome.desktop.interface icon-theme').read()
-        return output.strip()
+        output = subprocess.check_output('gsettings get org.gnome.desktop.interface icon-theme', shell=True).decode().strip()
+        return output.strip("'")
     except:
         return "Unknown"
 
 def get_terminal():
-    return os.environ.get('COLORTERM', "Unknown")
+    term = os.environ.get('TERM', "Unknown")
+    colorterm = os.environ.get('COLORTERM', "")
+    terminal = os.environ.get('TERMINAL', "")
+    
+    if terminal:
+        return terminal
+    elif colorterm:
+        return colorterm
+    else:
+        return term
+
+def get_terminal_font():
+    try:
+        # For GNOME Terminal
+        output = subprocess.check_output('gsettings get org.gnome.desktop.interface monospace-font-name', shell=True).decode().strip()
+        if output:
+            return output.strip("'")
+    except:
+        pass
+
+    try:
+        # For KDE Konsole
+        output = subprocess.check_output('konsole --list-profiles', shell=True).decode().strip().split("\n")
+        profile = output[0]
+        output = subprocess.check_output(f'konsoleprofile "Profile: {profile}" -p font', shell=True).decode().strip()
+        if output:
+            return output
+    except:
+        pass
+
+    return "Unknown"
+
+def get_system_font():
+    try:
+        # For GNOME
+        if "gnome" in os.environ.get('DESKTOP_SESSION', "").lower():
+            output = subprocess.check_output('gsettings get org.gnome.desktop.interface font-name', shell=True).decode().strip()
+            return output.strip("'")
+
+        # For KDE
+        if "kde" in os.environ.get('DESKTOP_SESSION', "").lower():
+            output = subprocess.check_output('kreadconfig5 --group General --key font', shell=True).decode().strip()
+            return output
+    except:
+        pass
+
+    return "Unknown"
 
 def print_color_strip():
     colors = [
@@ -158,12 +262,35 @@ def print_color_strip():
     strip = "".join([color + "█" for color in colors])
     print(strip + "\033[0m")  # Reset color
 
+def get_distro_logo(distro_name):
+    logos = {
+        "Zorin OS": """
+\033[36m        ██████████        \033[0m
+\033[36m    ████████████████    \033[0m
+\033[36m  ████████████████████  \033[0m
+\033[36m████████████████████████\033[0m
+\033[36m████████████████████████\033[0m
+\033[36m████████████████████████\033[0m
+\033[36m████████████████████████\033[0m
+\033[36m  ████████████████████  \033[0m
+\033[36m    ████████████████    \033[0m
+\033[36m        ██████████        \033[0m
+""",
+        # Add more ASCII logos for other supported distros here
+    }
+    return logos.get(distro_name, "Unsupported distro for artwork display")
+
 def main():
+    parser = argparse.ArgumentParser(description="QuickFetch System Information")
+    parser.add_argument("--experimental", action="store_true", help="Display with artwork similar to Neofetch")
+    args = parser.parse_args()
+
     os_info = get_os_info()
     kernel = get_kernel_info()
     architecture = get_arch_info()
     cpu_name, cpu_cores = get_cpu_info()
     total_memory, used_memory = get_memory_info()
+    swap_total, swap_used = get_swap_info()
     uptime = get_uptime_info()
     hostname = get_hostname_info()
     user = get_user_info()
@@ -176,27 +303,99 @@ def main():
     gtk_theme = get_gtk_theme()
     icon_theme = get_icon_theme()
     terminal = get_terminal()
-      
-    print(f"User: {user}@{hostname}")
-    print(f"OS: {os_info}")
-    print(f"Kernel: {kernel}")
-    print(f"Architecture: {architecture}")
-    print(f"CPU: {cpu_name} ({cpu_cores} cores)")
-    print(f"GPU: {gpu_info}")
-    print(f"Memory: {used_memory / (1024 ** 3):.2f}GiB / {total_memory / (1024 ** 3):.2f}GiB")
-    print(f"Uptime: {uptime}")
-    print(f"Resolution: {resolution}")
-    print(f"DE: {desktop_environment}")
-    print(f"WM: {window_manager}")
-    print(f"WM Theme: {window_manager_theme}")
-    print(f"Theme: {gtk_theme}")
-    print(f"Icons: {icon_theme}")
-    print(f"Terminal: {terminal}")
-    
-    for manager, count in package_manager_info.items():
-        print(f"{manager.capitalize()}: {count} packages")
-    
-    print_color_strip()
+    terminal_font = get_terminal_font()
+    system_font = get_system_font()
+    disk_usage_info = get_disk_usage_info()
+    local_ip = get_local_ip_info()
+    battery_info = get_battery_info()
+    locale_info = get_locale_info()
+
+    if args.experimental:
+        logo = get_distro_logo(os_info)
+        if logo == "Unsupported distro for artwork display":
+            print(f"User: {user}@{hostname}")
+            print(f"OS: {os_info}")
+            print(f"Kernel: {kernel}")
+            print(f"Architecture: {architecture}")
+            print(f"CPU: {cpu_name} ({cpu_cores} cores)")
+            print(f"GPU: {gpu_info}")
+            print(f"Memory: {used_memory / (1024 ** 3):.2f}GiB / {total_memory / (1024 ** 3):.2f}GiB")
+            print(f"Swap: {swap_used / (1024 ** 3):.2f}GiB / {swap_total / (1024 ** 3):.2f}GiB")
+            print(f"Uptime: {uptime}")
+            print(f"Resolution: {resolution}")
+            print(f"DE: {desktop_environment}")
+            print(f"WM: {window_manager}")
+            print(f"WM Theme: {window_manager_theme}")
+            print(f"Theme: {gtk_theme}")
+            print(f"Icons: {icon_theme}")
+            print(f"Terminal: {terminal}")
+            print(f"Terminal Font: {terminal_font}")
+            print(f"System Font: {system_font}")
+            for mountpoint, (total, used) in disk_usage_info.items():
+                print(f"Disk ({mountpoint}): {used / (1024 ** 3):.2f}GiB / {total / (1024 ** 3):.2f}GiB")
+            print(f"Local IP: {local_ip}")
+            print(f"Battery: {battery_info}")
+            print(f"Locale: {locale_info}")
+            for manager, count in package_manager_info.items():
+                print(f"{manager.capitalize()}: {count} packages")
+            print_color_strip()
+        else:
+            print(logo)
+            details = f"""
+User: {user}@{hostname}
+OS: {os_info}
+Kernel: {kernel}
+Architecture: {architecture}
+CPU: {cpu_name} ({cpu_cores} cores)
+GPU: {gpu_info}
+Memory: {used_memory / (1024 ** 3):.2f}GiB / {total_memory / (1024 ** 3):.2f}GiB
+Swap: {swap_used / (1024 ** 3):.2f}GiB / {swap_total / (1024 ** 3):.2f}GiB
+Uptime: {uptime}
+Resolution: {resolution}
+DE: {desktop_environment}
+WM: {window_manager}
+WM Theme: {window_manager_theme}
+Theme: {gtk_theme}
+Icons: {icon_theme}
+Terminal: {terminal}
+Terminal Font: {terminal_font}
+System Font: {system_font}
+Local IP: {local_ip}
+Battery: {battery_info}
+Locale: {locale_info}"""
+            for mountpoint, (total, used) in disk_usage_info.items():
+                details += f"\nDisk ({mountpoint}): {used / (1024 ** 3):.2f}GiB / {total / (1024 ** 3):.2f}GiB"
+            for manager, count in package_manager_info.items():
+                details += f"\n{manager.capitalize()}: {count} packages"
+            print(details)
+            print_color_strip()
+    else:
+        print(f"User: {user}@{hostname}")
+        print(f"OS: {os_info}")
+        print(f"Kernel: {kernel}")
+        print(f"Architecture: {architecture}")
+        print(f"CPU: {cpu_name} ({cpu_cores} cores)")
+        print(f"GPU: {gpu_info}")
+        print(f"Memory: {used_memory / (1024 ** 3):.2f}GiB / {total_memory / (1024 ** 3):.2f}GiB")
+        print(f"Swap: {swap_used / (1024 ** 3):.2f}GiB / {swap_total / (1024 ** 3):.2f}GiB")
+        print(f"Uptime: {uptime}")
+        print(f"Resolution: {resolution}")
+        print(f"DE: {desktop_environment}")
+        print(f"WM: {window_manager}")
+        print(f"WM Theme: {window_manager_theme}")
+        print(f"Theme: {gtk_theme}")
+        print(f"Icons: {icon_theme}")
+        print(f"Terminal: {terminal}")
+        print(f"Terminal Font: {terminal_font}")
+        print(f"System Font: {system_font}")
+        for mountpoint, (total, used) in disk_usage_info.items():
+            print(f"Disk ({mountpoint}): {used / (1024 ** 3):.2f}GiB / {total / (1024 ** 3):.2f}GiB")
+        print(f"Local IP: {local_ip}")
+        print(f"Battery: {battery_info}")
+        print(f"Locale: {locale_info}")
+        for manager, count in package_manager_info.items():
+            print(f"{manager.capitalize()}: {count} packages")
+        print_color_strip()
 
 if __name__ == "__main__":
     main()
