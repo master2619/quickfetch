@@ -7,7 +7,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Set variables
-REPO_URL="https://github.com/master2619/quickfetch/releases/download/release-2/quickfetch"
+REPO_URL="https://github.com/master2619/quickfetch/releases/download/release-3/quickfetch"
 DEST_PATH="/usr/bin/quickfetch"
 
 # Download the latest release
