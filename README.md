@@ -6,7 +6,7 @@ QuickFetch is a lightweight system information tool designed for Linux systems. 
 
 ### Sample Output
 
-\```bash
+```bash
 User: deepesh@HP-Linux-Laptop
 OS: Zorin OS 17.1
 Kernel: 6.9.3-x64v3-xanmod1
@@ -26,7 +26,7 @@ Dpkg: 2813 packages
 Apt: 2809 packages
 Snap: 7 packages
 Flatpak: 39 packages
-\```
+```
 
 ### Installation
 
@@ -34,9 +34,9 @@ Flatpak: 39 packages
 
 To install QuickFetch with a single command:
 
-\```bash
+```bash
 sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sudo sh
-\```
+```
 
 #### Manual Compilation
 
@@ -49,49 +49,49 @@ QuickFetch requires the following Python libraries:
 
 Install the dependencies using pip:
 
-\```bash
+```bash
 pip3 install psutil distro colorama GPUtil
-\```
+```
 
 To compile QuickFetch into a standalone executable using PyInstaller:
 
-\```bash
+```bash
 pip3 install pyinstaller
-\```
+```
 
 Ensure PyInstaller is in your PATH:
 
-\```bash
+```bash
 export PATH=$PATH:/home/$USER/.local/bin
-\```
+```
 
 Compile the script:
 
-\```bash
+```bash
 pyinstaller --onefile quickfetch.py
-\```
+```
 
 Move the compiled binary to `/usr/bin` for permanent installation:
 
-\```bash
+```bash
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
-\```
+```
 
 ### Usage
 
 Simply run the `quickfetch` executable from your terminal:
 
-\```bash
+```bash
 quickfetch
-\```
+```
 
 ### Making QuickFetch Accessible Everywhere
 
 To make the `quickfetch` binary accessible from anywhere in the terminal, add the parent directory of the binary file to your `~/.bashrc` or `~/.profile`:
 
-\```bash
+```bash
 echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc
-\```
+```
 
 ### License
 
