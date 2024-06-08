@@ -69,7 +69,9 @@ Usage
 
 Simply run the quickfetch executable from your terminal:
 
-./quickfetch
+```bash
+quickfetch
+```
 
 You will see output similar to the following:
 
