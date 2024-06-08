@@ -105,7 +105,9 @@ To make this quickfetch binary you either compiled or downloaded accesible from 
 
 Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running :-
 
+```bash
 echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc
+```
 
 License
 
