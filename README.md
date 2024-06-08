@@ -61,6 +61,10 @@ Navigate to the directory containing quickfetch.py and run:
 
     The compiled executable will be located in the dist directory.
 
+Move the compiled binary to /usr/bin folder for permanent isntallation :-
+
+sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
+
 Usage
 
 Simply run the quickfetch executable from your terminal:
@@ -82,10 +86,11 @@ Apt: 2808 packages
 Snap: 7 packages
 Flatpak: 39 packages
 
-Note:-
- To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
- Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc" and 
- 'export PATH=$PATH:/home/$USER/Downloads'"
+To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
+
+Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running :-
+
+echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc
 
 License
 
