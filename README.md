@@ -35,7 +35,7 @@ Flatpak: 39 packages
 To install QuickFetch with a single command:
 
 ```bash
-sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sudo sh
+sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
 ```
 
 #### Manual Compilation
