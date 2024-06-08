@@ -61,7 +61,7 @@ Navigate to the directory containing quickfetch.py and run:
 
     The compiled executable will be located in the dist directory.
 
-Move the compiled binary to /usr/bin folder for permanent isntallation :-
+Move the compiled binary to /usr/bin folder for permanent installation :-
 
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
 
