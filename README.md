@@ -15,7 +15,7 @@ Installation and Dependencies :-
 Easy Method (Single Command) :-
 
 ```bash
-curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sudo sh
+sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-2/installer.sh | sudo sh
 ```
 
 Manual Compile and Install method :-
