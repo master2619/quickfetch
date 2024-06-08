@@ -9,8 +9,6 @@ Features
     Shows system uptime
     Lists package counts from common package managers (dpkg, apt, snap, flatpak, and universal package managers)
 
-Screenshot
-
 Installation
 Dependencies
 
@@ -23,17 +21,11 @@ QuickFetch requires the following Python libraries:
 
 Install the dependencies using pip:
 
-bash
-
 pip3 install psutil distro colorama GPUtil
 
 Compiling from Source
 
 To compile QuickFetch into a standalone executable using PyInstaller, follow these steps:
-
-    Install PyInstaller:
-
-    bash
 
 pip3 install pyinstaller
 
@@ -49,20 +41,16 @@ Look for the Location line in the output and add the bin directory within this l
 
 bash
 
-export PATH=$PATH:/home/username/.local/bin
+export PATH=$PATH:/home/$USER/.local/bin
 
-To make this change permanent, add the above line to your ~/.bashrc or ~/.bash_profile file and reload it:
+To make this change permanent, add the above line to your ~/.profile or ~/.bashrc or ~/.bash_profile file and reload it:
 
-bash
-
-echo 'export PATH=$PATH:/home/username/.local/bin' >> ~/.bashrc
+echo 'export PATH=$PATH:/home/$USER/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
 Compile the Script:
 
 Navigate to the directory containing quickfetch.py and run:
-
-bash
 
     pyinstaller --onefile quickfetch.py
 
@@ -72,13 +60,9 @@ Usage
 
 Simply run the quickfetch executable from your terminal:
 
-bash
-
 ./quickfetch
 
 You will see output similar to the following:
-
-plaintext
 
 User: deepesh@HP-Linux-Laptop
 OS: Zorin OS 17.1
@@ -94,6 +78,10 @@ Snap: 7 packages
 Flatpak: 39 packages
 ████████████████████████████████████████████████████████████████
 
+Note:-
+ To make this quickfetch binary you either compiled or downloaded accesible from anywhere in the terminal, follow these steps:-
+ Add the parent directory of the binary file to your ~/.bashrc or ~/.profile file by running "echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.profile" and 'export PATH=$PATH:/home/$USER/Downloads'"
+
 License
 
 This project is licensed under the GPL 3.0 License. See the LICENSE file for details.
@@ -103,7 +91,7 @@ Contributions are welcome! Please fork the repository and create a pull request 
 Issues
 
 If you encounter any issues or have suggestions for improvements, please open an issue on the GitHub repository.
-Acknowledgements
+Acknowledgements :-
 
     Inspired by Neofetch
     Uses psutil for system information
