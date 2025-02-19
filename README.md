@@ -46,12 +46,23 @@ Locale: en_IN
 
 ## **Installation**  
 
-### **Easy Installation (Recommended for Debian-Based Distros)**  
+### **Easy Installation (Debian-Based Distros)**  
 For Debian-based distributions (Ubuntu, Zorin OS, Pop!_OS, Linux Mint, etc.), you can install QuickFetch using a single command:  
 ```bash
 sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
 ```
-> **Note:** If you are using Arch, Fedora, or other non-Debian distributions, follow the **manual installation** steps below.
+### **Easy Installation (Fedora-based Distros)**
+For Fedora-based Linux distributions.
+```bash
+sudo dnf install curl -y && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
+```
+### **Easy Installation (Arch-Based Distros)**
+For Arch-based distributions like Manjaro, Arco Linux, etc.
+```bash
+sudo pacman -S curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
+```
+
+> **Note:** If you are using other Linux distributions, follow the **manual installation** steps below.
 
 ---
 
