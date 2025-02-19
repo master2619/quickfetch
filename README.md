@@ -107,11 +107,15 @@ python3 quickfetch.py
 ```bash
 pip3 install pyinstaller
 ```
-#### **Step 2: Compile QuickFetch**  
+#### **Step 2: Add Pyinstaller to Console PATH**
+```bash
+export PATH=$PATH:/home/$USER/.local/bin
+```
+#### **Step 3: Compile QuickFetch**  
 ```bash
 pyinstaller --onefile quickfetch.py
 ```
-#### **Step 3: Move the Compiled Binary for Global Access**  
+#### **Step 4: Move the Compiled Binary for Global Access**  
 ```bash
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
 ```
