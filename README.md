@@ -3,6 +3,14 @@
 QuickFetch is a lightweight system information tool designed for Linux systems. It provides concise and visually appealing details about your system's configuration and usage. With QuickFetch, you can quickly access essential information such as the operating system, kernel version, hardware architecture, CPU and GPU specifications, memory usage, uptime, and package manager statistics.  
 
 ## **Features**  
+✔ Displays essential system information (OS, kernel, CPU, GPU, memory, uptime, etc.)  
+✔ Supports multiple display resolutions and desktop environments  
+✔ Detects and displays disk usage across multiple partitions  
+✔ Shows battery status and local IP  
+✔ Package Manager Detection (Only on Debian-based systems: `dpkg`, `apt`, `snap`, `flatpak`)  
+✔ Works on all major Linux distributions  
+✔ Lightweight and easy to install  
+
 ### **Sample Output**  
 ```
 User: hypr@HP-Linux
@@ -33,7 +41,7 @@ Local IP: 192.168.1.16
 Battery: 24.196787148594378% [Discharging]
 Locale: en_IN
 ```
-
+> **Note:** Debian-based Linux systems may also display package manager stats.
 ---
 
 ## **Installation**  
