@@ -1,114 +1,160 @@
-# QuickFetch
+# **QuickFetch**  
 
-QuickFetch is a lightweight system information tool designed for Linux systems. It provides concise and visually appealing details about your system's configuration and usage. With QuickFetch, you can quickly access essential information such as the operating system, kernel version, hardware architecture, CPU and GPU specifications, memory usage, uptime, and package manager statistics.
+QuickFetch is a lightweight system information tool designed for Linux systems. It provides concise and visually appealing details about your system's configuration and usage. With QuickFetch, you can quickly access essential information such as the operating system, kernel version, hardware architecture, CPU and GPU specifications, memory usage, uptime, and package manager statistics.  
 
-## Features
-
-### Sample Output
-
-```bash
-User: deepesh@HP-Linux-Laptop
-OS: Zorin OS 17.1
-Kernel: 6.9.3-x64v3-xanmod1
+## **Features**  
+### **Sample Output**  
+```
+User: hypr@HP-Linux
+OS: Manjaro Linux
+Kernel: 6.12.12-2-MANJARO
 Architecture: x86_64
 CPU: AMD Ryzen 3 3250U with Radeon Graphics (4 cores)
-GPU: Picasso/Raven 2 [Radeon Vega Series / Radeon Vega Mobile Series]
-Memory: 2.25GiB / 21.45GiB
-Uptime: 4:27:21
-Resolution: XWAYLAND0
-DE: Zorin
+GPU: No GPU found
+Memory: 2.81GiB / 21.45GiB
+Swap: 0.00GiB / 23.59GiB
+Uptime: 3:01:59
+Resolution: 1920x1080
+DE: Hyprland
 WM: Wayland
-WM Theme: 'Adwaita'
-Theme: 'ZorinBlue-Dark'
-Icons: 'ZorinBlue-Dark'
+WM Theme: Unknown
+Theme: Rose-Pine
+Icons: Tela-circle-pink
 Terminal: truecolor
-Dpkg: 2813 packages
-Apt: 2809 packages
-Snap: 7 packages
-Flatpak: 39 packages
+Terminal Font: CaskaydiaCove Nerd Font Mono 9
+System Font: Unknown
+Disk (/): 80.18GiB / 907.62GiB
+Disk (/home): 80.18GiB / 907.62GiB
+Disk (/var/cache): 80.18GiB / 907.62GiB
+Disk (/var/log): 80.18GiB / 907.62GiB
+Disk (/boot/efi): 0.00GiB / 0.29GiB
+Disk (/run/media/deepesh/DATA): 271.19GiB / 931.50GiB
+Local IP: 192.168.1.16
+Battery: 24.196787148594378% [Discharging]
+Locale: en_IN
 ```
 
-### Installation
+---
 
-#### Easy Installation
+## **Installation**  
 
-To install QuickFetch with a single command:
-
+### **Easy Installation (Recommended for Debian-Based Distros)**  
+For Debian-based distributions (Ubuntu, Zorin OS, Pop!_OS, Linux Mint, etc.), you can install QuickFetch using a single command:  
 ```bash
 sudo apt install curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
 ```
+> **Note:** If you are using Arch, Fedora, or other non-Debian distributions, follow the **manual installation** steps below.
 
-#### Manual Compilation
+---
 
-QuickFetch requires the following Python libraries:
+### **Manual Installation (For All Distros)**  
+QuickFetch is written in Python and requires the following dependencies:  
+- **psutil** → Retrieves system information  
+- **distro** → Detects Linux distribution  
+- **colorama** → Enables colored terminal output  
+- **GPUtil** → Fetches GPU information  
 
-- psutil
-- distro
-- colorama
-- GPUtil
+#### **Step 1: Install pip (if not already installed)**  
+Depending on your Linux distribution, use the following command to install `pip3`:
 
-Install the dependencies using pip:
+- **Debian/Ubuntu-based Distros**:  
+  ```bash
+  sudo apt update && sudo apt install python3-pip -y
+  ```  
+- **Arch Linux & Manjaro**:  
+  ```bash
+  sudo pacman -S python-pip --noconfirm
+  ```  
+- **Fedora**:  
+  ```bash
+  sudo dnf install python3-pip -y
+  ```  
+- **openSUSE**:  
+  ```bash
+  sudo zypper install python3-pip
+  ```  
+- **Void Linux**:  
+  ```bash
+  sudo xbps-install -S python3-pip
+  ```  
+- **Alpine Linux**:  
+  ```bash
+  sudo apk add py3-pip
+  ```  
 
+#### **Step 2: Install Dependencies**  
 ```bash
 pip3 install psutil distro colorama GPUtil
 ```
 
-To compile QuickFetch into a standalone executable using PyInstaller:
+#### **Step 3: Running QuickFetch Without Compilation**  
+```bash
+python3 quickfetch.py
+```
 
+---
+
+### **Compiling QuickFetch (For Standalone Usage)**  
+#### **Step 1: Install PyInstaller**  
 ```bash
 pip3 install pyinstaller
 ```
-
-Ensure PyInstaller is in your PATH:
-
-```bash
-export PATH=$PATH:/home/$USER/.local/bin
-```
-
-Compile the script:
-
+#### **Step 2: Compile QuickFetch**  
 ```bash
 pyinstaller --onefile quickfetch.py
 ```
-
-Move the compiled binary to `/usr/bin` for permanent installation:
-
+#### **Step 3: Move the Compiled Binary for Global Access**  
 ```bash
 sudo mv /home/$USER/quickfetch/dist/quickfetch /usr/bin/quickfetch
 ```
 
-### Usage
+---
 
-Simply run the `quickfetch` executable from your terminal:
+## **Making QuickFetch Run Without Sudo**  
+Since QuickFetch requires `sudo`, create an alias for convenience.  
 
+### **Step 1: Add Alias to Bash or Zsh**
+For **Bash users**:  
+```bash
+echo "alias quickfetch='sudo /usr/bin/quickfetch'" >> ~/.bashrc
+source ~/.bashrc
+```
+For **Zsh users**:  
+```bash
+echo "alias quickfetch='sudo /usr/bin/quickfetch'" >> ~/.zshrc
+source ~/.zshrc
+```
+This ensures `quickfetch` runs with `sudo` automatically.
+
+---
+
+## **Usage**  
 ```bash
 quickfetch
 ```
 
-### Making QuickFetch Accessible Everywhere
+---
 
-To make the `quickfetch` binary accessible from anywhere in the terminal, add the parent directory of the binary file to your `~/.bashrc` or `~/.profile`:
+## **License**  
+GPL 3.0 License. See the LICENSE file for details.  
 
-```bash
-echo 'export PATH=$PATH:/home/$USER/Downloads/' >> ~/.bashrc
-```
+---
 
-### License
+## **Contributing**  
+Fork the repository and create a pull request with your changes.  
 
-This project is licensed under the GPL 3.0 License. See the [LICENSE](LICENSE) file for details.
+---
 
-### Contributing
+## **Issues & Troubleshooting**  
+🔹 Check if dependencies are installed (`pip3 list | grep psutil distro colorama GPUtil`).  
+🔹 Ensure the binary is in `/usr/bin/`.  
+🔹 Open an **issue** on GitHub for help.  
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes.
+---
 
-### Issues
-
-If you encounter any issues or have suggestions for improvements, please open an issue on the [GitHub repository](https://github.com/master2619/quickfetch).
-
-## Acknowledgements
-
-- Inspired by Neofetch
-- Uses psutil for system information
-- Uses distro for Linux distribution detection
-- Uses GPUtil for GPU information
-- Uses colorama for colored terminal output
+## **Acknowledgements**  
+- **Inspired by Neofetch**  
+- Uses **psutil** for system information  
+- Uses **distro** for Linux distribution detection  
+- Uses **GPUtil** for GPU information  
+- Uses **colorama** for colored terminal output  
