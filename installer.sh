@@ -6,35 +6,45 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Set variables
-REPO_URL="https://github.com/master2619/quickfetch/releases/download/release-3/quickfetch"
-DEST_PATH="/usr/bin/quickfetch"
+# Detect architecture
+ARCH="$(uname -m)"
+if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    BINARY_NAME="quickfetch-arm64"
+else
+    BINARY_NAME="quickfetch"
+fi
 
-# Download the latest release
-echo "Downloading the latest release from $REPO_URL..."
-wget -O quickfetch "$REPO_URL"
+# Set variables
+REPO_BASE="https://github.com/master2619/quickfetch/releases/download/release-3"
+DOWNLOAD_URL="$REPO_BASE/$BINARY_NAME"
+DEST_PATH="/usr/bin/quickfetch"
+TMP_PATH="/tmp/quickfetch.download"
+
+# Download the appropriate binary
+echo "Detected architecture: $ARCH"
+echo "Downloading $BINARY_NAME from $DOWNLOAD_URL..."
+wget -q -O "$TMP_PATH" "$DOWNLOAD_URL"
 
 # Check if the download was successful
-if [ $? -ne 0 ]; then
+if [ $? -ne 0 ] || [ ! -s "$TMP_PATH" ]; then
     echo "Error downloading the file. Please check the URL and try again."
     exit 1
 fi
 
-# Move the binary to /usr/bin/
-echo "Moving the binary to $DEST_PATH..."
-mv quickfetch "$DEST_PATH"
+# Move the downloaded file to the destination, renaming it to 'quickfetch'
+echo "Installing to $DEST_PATH..."
+mv "$TMP_PATH" "$DEST_PATH"
 
 # Make the binary executable
 chmod +x "$DEST_PATH"
 
-# Verify the installation
+# Verify installation
 if [ -f "$DEST_PATH" ]; then
     echo "QuickFetch has been successfully installed to $DEST_PATH."
 else
-    echo "Installation failed. Please check the permissions and try again."
+    echo "Installation failed. Please check permissions and try again."
     exit 1
 fi
 
 echo "Installation complete. You can run QuickFetch by typing 'quickfetch' in the terminal."
-
 exit 0
