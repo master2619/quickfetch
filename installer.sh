@@ -1,20 +1,24 @@
-#!/bin/bash
+#!/bin/sh
+# installer.sh — QuickFetch installer (POSIX sh compatible)
 
-# Ensure the script is run as root
-if [ "$(id -u)" -ne 0 ]; then
+# Must run as root
+if [ "$(id -u)" != "0" ]; then
     echo "This script must be run as root. Please use sudo."
     exit 1
 fi
 
 # Detect architecture
-ARCH="$(uname -m)"
-if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    BINARY_NAME="quickfetch-arm64"
-else
-    BINARY_NAME="quickfetch"
-fi
+ARCH=$(uname -m)
+case "$ARCH" in
+    aarch64|arm64)
+        BINARY_NAME="quickfetch-arm64"
+        ;;
+    *)
+        BINARY_NAME="quickfetch"
+        ;;
+esac
 
-# Set variables
+# Set URLs and paths
 REPO_BASE="https://github.com/master2619/quickfetch/releases/download/release-3"
 DOWNLOAD_URL="$REPO_BASE/$BINARY_NAME"
 DEST_PATH="/usr/bin/quickfetch"
@@ -23,28 +27,26 @@ TMP_PATH="/tmp/quickfetch.download"
 # Download the appropriate binary
 echo "Detected architecture: $ARCH"
 echo "Downloading $BINARY_NAME from $DOWNLOAD_URL..."
-curl -fsSL -o "$TMP_PATH" "$DOWNLOAD_URL"
-
-# Check if the download was successful
+curl -fsSL "$DOWNLOAD_URL" -o "$TMP_PATH"
 if [ $? -ne 0 ] || [ ! -s "$TMP_PATH" ]; then
-    echo "Error downloading the file. Please check the URL and try again."
+    echo "Error: failed to download $DOWNLOAD_URL"
     exit 1
 fi
 
-# Move the downloaded file to the destination, renaming it to 'quickfetch'
+# Install the binary
 echo "Installing to $DEST_PATH..."
-mv "$TMP_PATH" "$DEST_PATH"
-
-# Make the binary executable
+mv "$TMP_PATH" "$DEST_PATH" || {
+    echo "Error: failed to move file to $DEST_PATH"
+    exit 1
+}
 chmod +x "$DEST_PATH"
 
 # Verify installation
-if [ -f "$DEST_PATH" ]; then
-    echo "QuickFetch has been successfully installed to $DEST_PATH."
+if [ -x "$DEST_PATH" ]; then
+    echo "✔ QuickFetch installed at $DEST_PATH"
+    echo "Run it with: quickfetch"
+    exit 0
 else
-    echo "Installation failed. Please check permissions and try again."
+    echo "✖ Installation failed."
     exit 1
 fi
-
-echo "Installation complete. You can run QuickFetch by typing 'quickfetch' in the terminal."
-exit 0
