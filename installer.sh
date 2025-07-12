@@ -1,39 +1,39 @@
 #!/bin/sh
 
-# Abort script on error
+# Exit immediately if any command fails
 set -e
 
-# Temp file
-TMP_FILE="/tmp/quickfetch.bin.$$"
+# Temp binary location
+TMP_FILE="/tmp/quickfetch.$$"
 
-# Cleanup on exit
+# Ensure cleanup on exit
 cleanup() {
     if [ -f "$TMP_FILE" ]; then
         rm -f "$TMP_FILE"
     fi
 }
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
 
-# Function to check root
+# Ensure the script is run as root
 check_root() {
-    USER_ID=`id -u`
+    USER_ID=$(id -u)
     if [ "$USER_ID" -ne 0 ]; then
-        echo "Error: This script must be run as root. Please use sudo." >&2
+        echo "Error: This script must be run as root. Use sudo." >&2
         exit 1
     fi
 }
 
-# Function to detect architecture
+# Detect system architecture
 detect_arch() {
-    ARCH_RAW=`uname -m`
+    ARCH_RAW=$(uname -m)
     case "$ARCH_RAW" in
-        aarch64|arm64)
+        aarch64 | arm64)
             echo "arm64"
             ;;
-        x86_64|amd64)
+        x86_64 | amd64)
             echo "amd64"
             ;;
-        i386|i686)
+        i386 | i686)
             echo "386"
             ;;
         *)
@@ -42,55 +42,57 @@ detect_arch() {
     esac
 }
 
-# Function to download binary
+# Download the correct binary based on architecture
 download_binary() {
     ARCH="$1"
     BASE_URL="https://github.com/master2619/quickfetch/releases/download/release-3"
 
     if [ "$ARCH" = "arm64" ]; then
-        BINARY_URL="$BASE_URL/quickfetch-arm64"
+        FILE_NAME="quickfetch-arm64"
     else
-        BINARY_URL="$BASE_URL/quickfetch"
+        FILE_NAME="quickfetch"
     fi
 
-    echo "Downloading binary for architecture: $ARCH"
-    echo "Source URL: $BINARY_URL"
+    DOWNLOAD_URL="${BASE_URL}/${FILE_NAME}"
 
-    curl -fsSL "$BINARY_URL" -o "$TMP_FILE" || {
-        echo "Download failed. Please check your internet connection or the release URL."
+    echo "Downloading QuickFetch for architecture: $ARCH"
+    echo "From URL: $DOWNLOAD_URL"
+
+    curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE" || {
+        echo "Error: Failed to download binary." >&2
         exit 1
     }
 
     if [ ! -s "$TMP_FILE" ]; then
-        echo "Downloaded file is empty. Aborting."
+        echo "Error: Downloaded file is empty." >&2
         exit 1
     fi
 }
 
-# Function to install binary
+# Move binary to destination and set permissions
 install_binary() {
     DEST="/usr/bin/quickfetch"
 
-    echo "Installing QuickFetch to $DEST..."
+    echo "Installing to $DEST..."
     mv "$TMP_FILE" "$DEST"
     chmod +x "$DEST"
 
     if [ ! -x "$DEST" ]; then
-        echo "Installation failed. File does not exist or is not executable."
+        echo "Error: Installation failed." >&2
         exit 1
     fi
 
-    echo "QuickFetch installed successfully."
-    echo "Run it using: quickfetch"
+    echo "✅ QuickFetch installed successfully!"
+    echo "👉 Run it by typing: quickfetch"
 }
 
-### MAIN EXECUTION FLOW ###
+### Main script flow ###
 check_root
 
-ARCH_DETECTED=`detect_arch`
+ARCH_DETECTED=$(detect_arch)
 
 if [ "$ARCH_DETECTED" = "unknown" ]; then
-    echo "Unsupported architecture: `uname -m`"
+    echo "Unsupported architecture: $(uname -m)" >&2
     exit 1
 fi
 
