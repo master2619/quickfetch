@@ -9,14 +9,11 @@ fi
 
 # Detect architecture
 ARCH=$(uname -m)
-case "$ARCH" in
-    aarch64|arm64)
-        BINARY_NAME="quickfetch-arm64"
-        ;;
-    *)
-        BINARY_NAME="quickfetch"
-        ;;
-esac
+if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    BINARY_NAME="quickfetch-arm64"
+else
+    BINARY_NAME="quickfetch"
+fi
 
 # Set URLs and paths
 REPO_BASE="https://github.com/master2619/quickfetch/releases/download/release-3"
