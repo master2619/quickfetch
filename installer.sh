@@ -23,7 +23,7 @@ TMP_PATH="/tmp/quickfetch.download"
 # Download the appropriate binary
 echo "Detected architecture: $ARCH"
 echo "Downloading $BINARY_NAME from $DOWNLOAD_URL..."
-wget -q -O "$TMP_PATH" "$DOWNLOAD_URL"
+curl -fsSL -o "$TMP_PATH" "$DOWNLOAD_URL"
 
 # Check if the download was successful
 if [ $? -ne 0 ] || [ ! -s "$TMP_PATH" ]; then
