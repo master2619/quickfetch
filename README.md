@@ -62,7 +62,7 @@ For Arch-based distributions like Manjaro, Arco Linux, etc.
 sudo pacman -S curl && curl -sSL https://github.com/master2619/quickfetch/releases/download/release-3/installer.sh | sudo sh
 ```
 
-> **Note:** If you are using other Linux distributions, follow the **manual installation** steps below.
+> **Note:** If you are using other Linux distributions or on an alternate architecture, follow the **manual installation** steps below.
 
 ---
 
@@ -103,7 +103,7 @@ Depending on your Linux distribution, use the following command to install `pip3
 
 #### **Step 2: Install Dependencies**  
 ```bash
-pip3 install psutil distro colorama GPUtil
+pip3 install psutil distro colorama GPUtil py-cpuinfo --break-system-packages
 ```
 
 #### **Step 3: Running QuickFetch Without Compilation**  
@@ -116,7 +116,7 @@ python3 quickfetch.py
 ### **Compiling QuickFetch (For Standalone Usage)**  
 #### **Step 1: Install PyInstaller**  
 ```bash
-pip3 install pyinstaller
+pip3 install pyinstaller --break-system-packages
 ```
 #### **Step 2: Add Pyinstaller to Console PATH**
 ```bash
