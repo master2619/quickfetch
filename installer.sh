@@ -50,7 +50,7 @@ download_binary() {
     if [ "$ARCH" = "arm64" ]; then
         FILE_NAME="quickfetch-arm64"
     else
-        FILE_NAME="quickfetch"
+        FILE_NAME="quickfetch-amd64"
     fi
 
     DOWNLOAD_URL="${BASE_URL}/${FILE_NAME}"
